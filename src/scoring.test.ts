@@ -227,8 +227,10 @@ describe('computePersonalityScores', () => {
     expect(scores.Conscientiousness).toBe(50);
   });
 
-  it('untagged option does not appear and does not affect other trait percentages', () => {
-    // Choose the untagged option t-int-4-b. No trait should be recorded from it.
+  it('untagged option does not contribute a pick and does not invent a trait', () => {
+    // Choose the untagged option t-int-4-b.
+    // The sibling option t-int-4-a still creates an Extraversion appearance,
+    // but with 0 picks → Extraversion: 0. No other traits appear.
     const scores = computePersonalityScores(
       [],
       [],
@@ -238,8 +240,8 @@ describe('computePersonalityScores', () => {
       []
     );
 
-    // Empty record — untagged option is skipped entirely.
-    expect(scores).toEqual({});
-    expect(scores.Extraversion).toBeUndefined();
+    expect(scores).toEqual({ Extraversion: 0 });
+    // Explicitly: the untagged choice itself did not invent any new trait key.
+    expect(Object.keys(scores)).toEqual(['Extraversion']);
   });
 });
