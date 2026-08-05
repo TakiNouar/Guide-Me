@@ -71,8 +71,12 @@ describe('computeInterestScores', () => {
 
 describe('computeAptitudeScores', () => {
   it('scores 100 for every cluster when student picks the correct-instinct option on every item', () => {
+    // Technical now has 4 items; the other clusters still have 1 each.
     const responses = [
       { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' },
+      { itemId: 'apt-technical-2', chosenOptionId: 'apt-technical-2-a' },
+      { itemId: 'apt-technical-3', chosenOptionId: 'apt-technical-3-a' },
+      { itemId: 'apt-technical-4', chosenOptionId: 'apt-technical-4-a' },
       { itemId: 'apt-business-1', chosenOptionId: 'apt-business-1-a' },
       { itemId: 'apt-social-1', chosenOptionId: 'apt-social-1-a' },
       { itemId: 'apt-droit-1', chosenOptionId: 'apt-droit-1-a' },
@@ -90,10 +94,13 @@ describe('computeAptitudeScores', () => {
 
   it('scores 0 for Business and 100 for the others when only Business is answered incorrectly', () => {
     const responses = [
-      { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }, // correct
+      { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' },
+      { itemId: 'apt-technical-2', chosenOptionId: 'apt-technical-2-a' },
+      { itemId: 'apt-technical-3', chosenOptionId: 'apt-technical-3-a' },
+      { itemId: 'apt-technical-4', chosenOptionId: 'apt-technical-4-a' },
       { itemId: 'apt-business-1', chosenOptionId: 'apt-business-1-b' }, // not correct
-      { itemId: 'apt-social-1', chosenOptionId: 'apt-social-1-a' }, // correct
-      { itemId: 'apt-droit-1', chosenOptionId: 'apt-droit-1-a' }, // correct
+      { itemId: 'apt-social-1', chosenOptionId: 'apt-social-1-a' },
+      { itemId: 'apt-droit-1', chosenOptionId: 'apt-droit-1-a' },
     ];
 
     const scores = computeAptitudeScores(placeholderAptitudeItems, responses);
@@ -118,6 +125,24 @@ describe('computeAptitudeScores', () => {
     for (const value of Object.values(scores)) {
       expect(Number.isNaN(value)).toBe(false);
     }
+  });
+
+  it('scores Technical at 50% when only 2 of 4 Technical items are answered correctly', () => {
+    // Partial correctness now meaningful because Technical has multiple items.
+    const responses = [
+      { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }, // correct
+      { itemId: 'apt-technical-2', chosenOptionId: 'apt-technical-2-a' }, // correct
+      { itemId: 'apt-technical-3', chosenOptionId: 'apt-technical-3-b' }, // incorrect
+      { itemId: 'apt-technical-4', chosenOptionId: 'apt-technical-4-b' }, // incorrect
+      // other clusters unanswered → 0 for them
+    ];
+
+    const scores = computeAptitudeScores(placeholderAptitudeItems, responses);
+
+    expect(scores.Technical).toBe(50);
+    expect(scores.Business).toBe(0);
+    expect(scores.Social).toBe(0);
+    expect(scores.Droit).toBe(0);
   });
 });
 
