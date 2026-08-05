@@ -8,6 +8,7 @@ import {
   placeholderAptitudeItems,
   placeholderInterestItems,
   placeholderPersonalityItems,
+  specialtyDisambiguationInterestItems,
 } from './placeholderItems';
 import { StudentProfile } from './types';
 
@@ -34,9 +35,9 @@ const sampleStudent: StudentProfile = {
   ],
 
   aptitudeResponses: [
-    { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }, // correct
+    { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }, // correct (+ Conscientiousness trait)
     { itemId: 'apt-technical-2', chosenOptionId: 'apt-technical-2-a' }, // correct
-    { itemId: 'apt-technical-3', chosenOptionId: 'apt-technical-3-a' }, // correct
+    { itemId: 'apt-technical-3', chosenOptionId: 'apt-technical-3-a' }, // correct (+ Conscientiousness trait)
     { itemId: 'apt-technical-4', chosenOptionId: 'apt-technical-4-a' }, // correct
     { itemId: 'apt-business-1', chosenOptionId: 'apt-business-1-b' },  // not correct
     { itemId: 'apt-social-1', chosenOptionId: 'apt-social-1-a' },       // correct
@@ -52,7 +53,18 @@ const sampleStudent: StudentProfile = {
 function main() {
   const interestScores = computeInterestScores(placeholderInterestItems, sampleStudent.interestResponses);
   const aptitudeScores = computeAptitudeScores(placeholderAptitudeItems, sampleStudent.aptitudeResponses);
-  const personalityScores = computePersonalityScores(placeholderPersonalityItems, sampleStudent.personalityResponses);
+
+  // Dual-tagging path: personality items + interest/aptitude options that carry trait tags.
+  // Sample student's correct answers on apt-technical-1 and apt-technical-3 now also
+  // contribute to Conscientiousness (those options are trait-tagged).
+  const personalityScores = computePersonalityScores(
+    placeholderPersonalityItems,
+    sampleStudent.personalityResponses,
+    placeholderInterestItems,
+    sampleStudent.interestResponses,
+    placeholderAptitudeItems,
+    sampleStudent.aptitudeResponses
+  );
 
   const ranked = rankClusters(interestScores, aptitudeScores, sampleStudent);
   const personalityQualifier = getPersonalityQualifier(personalityScores);
@@ -75,6 +87,24 @@ function main() {
   });
 
   console.log(`\nPersonality qualifier: ${personalityQualifier}`);
+
+  // --- Dual-tagging demonstration (InterestOption-sourced trait) ---
+  // Sample student also answers t-int-4-a from specialtyDisambiguationInterestItems.
+  // That option carries trait: 'Extraversion', so Extraversion's contribution here
+  // comes from an interest item, not a dedicated personality item.
+  const dualTagInterestResponses = [
+    { itemId: 't-int-4', chosenOptionId: 't-int-4-a' }, // Extraversion via interest option
+  ];
+  const dualTagPersonalityScores = computePersonalityScores(
+    placeholderPersonalityItems,
+    sampleStudent.personalityResponses,
+    specialtyDisambiguationInterestItems,
+    dualTagInterestResponses,
+    placeholderAptitudeItems,
+    sampleStudent.aptitudeResponses
+  );
+  console.log('\n--- Dual-tagging demo (t-int-4-a contributes Extraversion) ---');
+  console.log('Personality scores with interest-sourced Extraversion:', dualTagPersonalityScores);
 }
 
 main();
