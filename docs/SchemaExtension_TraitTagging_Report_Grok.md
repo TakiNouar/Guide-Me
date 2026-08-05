@@ -52,21 +52,28 @@ No changes to `computeInterestScores`, `computeAptitudeScores`, or `decisionMatr
 
 ---
 
-## 3. Verification (actually run)
+## 3. Verification (local Windows run by Taki)
+
+Commands run:
+```
+npx tsc --noEmit
+npm start
+npm test
+```
 
 ### 3.1 `npx tsc --noEmit`
 ```
-(no output)
-TSC_EXIT=0
+npm notice run his-scoring-engine@0.1.0 npx
+npm notice run tsc --noEmit
 ```
-Clean.
+(no type errors — clean)
 
 ### 3.2 `npm start`
 ```
+npm notice run his-scoring-engine@0.1.0 start
+npm notice run ts-node src/demo.ts
 --- HIS Orientation Test — Scoring Engine Scaffold Demo ---
-
 Student: Sample Student (Sciences expérimentales)
-
 Interest scores (Step 1): { Technical: 100, Business: 0, Social: 0, Droit: 100 }
 Aptitude scores (Step 2): { Technical: 100, Business: 0, Social: 100, Droit: 100 }
 Personality scores (Step 4): {
@@ -75,15 +82,12 @@ Personality scores (Step 4): {
   Openness: 100,
   Agreeableness: 0
 }
-
 Ranked cluster recommendations (Step 5):
-1. Technical — Strong match  (interest 100%, aptitude 100%, grade modifier 82.5)
-2. Droit — Strong match  (interest 100%, aptitude 100%, grade modifier n/a)
-3. Business — Deprioritize  (interest 0%, aptitude 0%, grade modifier n/a)
-4. Social — Possible hidden strength  (interest 0%, aptitude 100%, grade modifier n/a)
-
+1. Technical — Strong match (interest 100%, aptitude 100%, grade modifier 82.5)
+2. Droit — Strong match (interest 100%, aptitude 100%, grade modifier n/a)
+3. Business — Deprioritize (interest 0%, aptitude 0%, grade modifier n/a)
+4. Social — Possible hidden strength (interest 0%, aptitude 100%, grade modifier n/a)
 Personality qualifier: Working-style lean: Conscientiousness (100%) — descriptive only, not a fit judgment.
-
 --- Dual-tagging demo (t-int-4-a contributes Extraversion) ---
 Personality scores with interest-sourced Extraversion: {
   Conscientiousness: 100,
@@ -91,24 +95,19 @@ Personality scores with interest-sourced Extraversion: {
   Openness: 100,
   Agreeableness: 0
 }
-START_EXIT=0
 ```
-
-Notes on numbers:
-- Base personality: Conscientiousness 100 / Openness 100 (from personality items) plus the two Conscientiousness-tagged aptitude options also picked → still 100% Conscientiousness.
-- Dual-tagging demo: Extraversion appears at 50% because `per-1` contributes an Extraversion *appearance* (even though the student did not pick it) and `t-int-4-a` contributes 1 pick → 1/2 = 50%.
 
 ### 3.3 `npm test`
 ```
-PASS src/scoring.test.ts
-PASS src/decisionMatrix.test.ts
-
+npm notice run his-scoring-engine@0.1.0 test
+npm notice run jest
+ PASS src/decisionMatrix.test.ts
+ PASS src/scoring.test.ts
 Test Suites: 2 passed, 2 total
-Tests:       30 passed, 30 total
-Snapshots:   0 total
-Time:        1.649 s
+Tests: 30 passed, 30 total
+Snapshots: 0 total
+Time: 3.608 s
 Ran all test suites.
-TEST_EXIT=0
 ```
 
 All 30 tests green.
