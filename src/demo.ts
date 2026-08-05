@@ -11,8 +11,8 @@ import {
 } from './placeholderItems';
 import { StudentProfile } from './types';
 
-// Sample student: leans Technical/Investigative on interest, answers the
-// Technical aptitude item correctly, has a strong Math+Physics grade
+// Sample student: leans Technical/Investigative on interest, answers all
+// Technical aptitude items correctly, has a strong Math+Physics grade
 // modifier, and reads as Conscientious/Open on the personality items.
 const sampleStudent: StudentProfile = {
   id: 'demo-001',
@@ -27,7 +27,7 @@ const sampleStudent: StudentProfile = {
   },
 
   interestResponses: [
-    { itemId: 'int-1', chosenOptionId: 'int-1-a' }, // Technical
+    { itemId: 'int-1', chosenOptionId: 'int-1-a' }, // Technical (bike-chain diagnostic)
     { itemId: 'int-2', chosenOptionId: 'int-2-a' }, // Technical
     { itemId: 'int-3', chosenOptionId: 'int-3-b' }, // Droit
     { itemId: 'int-4', chosenOptionId: 'int-4-b' }, // Droit
@@ -35,6 +35,9 @@ const sampleStudent: StudentProfile = {
 
   aptitudeResponses: [
     { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }, // correct
+    { itemId: 'apt-technical-2', chosenOptionId: 'apt-technical-2-a' }, // correct
+    { itemId: 'apt-technical-3', chosenOptionId: 'apt-technical-3-a' }, // correct
+    { itemId: 'apt-technical-4', chosenOptionId: 'apt-technical-4-a' }, // correct
     { itemId: 'apt-business-1', chosenOptionId: 'apt-business-1-b' },  // not correct
     { itemId: 'apt-social-1', chosenOptionId: 'apt-social-1-a' },       // correct
     { itemId: 'apt-droit-1', chosenOptionId: 'apt-droit-1-a' },         // correct
