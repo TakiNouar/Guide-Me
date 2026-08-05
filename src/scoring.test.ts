@@ -8,6 +8,7 @@ import {
   placeholderInterestItems,
   placeholderAptitudeItems,
   placeholderPersonalityItems,
+  specialtyDisambiguationInterestItems,
 } from './placeholderItems';
 import { StudentProfile } from './types';
 
@@ -169,13 +170,21 @@ describe('getGradeModifier', () => {
 });
 
 describe('computePersonalityScores', () => {
-  it('scores Conscientiousness 100 and Openness 100 for the specified choices', () => {
+  it('scores Conscientiousness 100 and Openness 100 for the specified choices (personality items only, empty interest/aptitude)', () => {
+    // Regression: empty interest/aptitude arrays → identical to pre-extension behavior.
     const responses = [
       { itemId: 'per-1', chosenOptionId: 'per-1-a' }, // Conscientiousness
       { itemId: 'per-2', chosenOptionId: 'per-2-a' }, // Openness
     ];
 
-    const scores = computePersonalityScores(placeholderPersonalityItems, responses);
+    const scores = computePersonalityScores(
+      placeholderPersonalityItems,
+      responses,
+      [],
+      [],
+      [],
+      []
+    );
 
     expect(scores).toEqual({
       Conscientiousness: 100,
@@ -183,5 +192,54 @@ describe('computePersonalityScores', () => {
       Openness: 100,
       Agreeableness: 0,
     });
+  });
+
+  it('InterestOption with trait tag contributes when chosen (t-int-4-a → Extraversion)', () => {
+    const scores = computePersonalityScores(
+      [],
+      [],
+      specialtyDisambiguationInterestItems,
+      [{ itemId: 't-int-4', chosenOptionId: 't-int-4-a' }],
+      [],
+      []
+    );
+
+    expect(scores.Extraversion).toBe(100);
+    // Only Extraversion should appear (t-int-4-a is the only tagged option chosen;
+    // t-int-4-b is untagged and the other items have no trait tags).
+    expect(scores.Conscientiousness).toBeUndefined();
+    expect(scores.Openness).toBeUndefined();
+    expect(scores.Agreeableness).toBeUndefined();
+  });
+
+  it('AptitudeOption with trait tag contributes when chosen (apt-technical-1-a → Conscientiousness)', () => {
+    const scores = computePersonalityScores(
+      [],
+      [],
+      [],
+      [],
+      placeholderAptitudeItems,
+      [{ itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }]
+    );
+
+    // apt-technical-1-a and apt-technical-3-a both carry Conscientiousness.
+    // Only apt-technical-1 was answered, so 1 pick / 2 appearances = 50.
+    expect(scores.Conscientiousness).toBe(50);
+  });
+
+  it('untagged option does not appear and does not affect other trait percentages', () => {
+    // Choose the untagged option t-int-4-b. No trait should be recorded from it.
+    const scores = computePersonalityScores(
+      [],
+      [],
+      specialtyDisambiguationInterestItems,
+      [{ itemId: 't-int-4', chosenOptionId: 't-int-4-b' }],
+      [],
+      []
+    );
+
+    // Empty record — untagged option is skipped entirely.
+    expect(scores).toEqual({});
+    expect(scores.Extraversion).toBeUndefined();
   });
 });
