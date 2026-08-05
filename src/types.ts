@@ -15,6 +15,8 @@ export interface InterestOption {
   id: string;
   text: string;
   cluster: Cluster;
+  specialty?: string;
+  trait?: BigFiveTrait;
 }
 
 export interface InterestItem {
@@ -31,6 +33,8 @@ export interface AptitudeOption {
   id: string;
   text: string;
   isCorrectInstinct: boolean;
+  specialty?: string;
+  trait?: BigFiveTrait;
 }
 
 export interface AptitudeItem {
