@@ -24,23 +24,23 @@ No changes to `scoring.ts`, `decisionMatrix.ts`, or `types.ts`.
 
 ## 2. Changes by file
 
-### `src/placeholderItems.ts`
-- **Top comment block** rewritten to accurately state mixed status: Technical aptitude + `int-1` are real; remaining interest items and Business/Social/Droit aptitude + personality items are still placeholders.
-- **`int-1`** replaced with the bike-chain diagnostic scenario (Technical vs Social).
-- **`int-2`, `int-3`, `int-4`** left exactly as they were (placeholders).
-- **`apt-technical-1`** replaced and expanded into four real items:
+### 2.1 `src/placeholderItems.ts`
+- Top comment block rewritten to accurately state mixed status: Technical aptitude + `int-1` are real; remaining interest items and Business/Social/Droit aptitude + personality items are still placeholders.
+- `int-1` replaced with the bike-chain diagnostic scenario (Technical vs Social).
+- `int-2`, `int-3`, `int-4` left exactly as they were (placeholders).
+- `apt-technical-1` replaced and expanded into four real items:
   - `apt-technical-1` — wifi diagnosis
   - `apt-technical-2` — suspicious group-chat link
   - `apt-technical-3` — flickering ceiling lamp
   - `apt-technical-4` — edge-case thinking while building for 30+ users
 - Business / Social / Droit aptitude items and all personality items left untouched.
 
-### `src/demo.ts`
+### 2.2 `src/demo.ts`
 - `aptitudeResponses` now includes correct-instinct answers for all four Technical items (`apt-technical-1-a` … `apt-technical-4-a`).
 - Business / Social / Droit responses left as before.
 - Inline comment on the `int-1` interest response updated to reference the new bike-chain scenario.
 
-### `src/scoring.test.ts`
+### 2.3 `src/scoring.test.ts`
 - All aptitude tests that previously assumed 1 Technical item updated to supply responses for all 4 Technical items when expecting 100%.
 - New test added: **“scores Technical at 50% when only 2 of 4 Technical items are answered correctly”**.
 - Business / Social / Droit aptitude tests left structurally the same (still 1 item each).
@@ -71,10 +71,10 @@ These were **not** executed inside the assistant environment (Windows local mach
 
 ## 5. What was deliberately not done
 
-- No wiring of T-INT-2 / T-INT-3 / T-INT-4.
-- No `specialty` field or any schema change to `types.ts`.
-- No modifications to scoring / decision-matrix logic.
-- No changes to non-Technical placeholder items.
+1. No wiring of T-INT-2 / T-INT-3 / T-INT-4.  
+2. No `specialty` field or any schema change to `types.ts`.  
+3. No modifications to scoring / decision-matrix logic.  
+4. No changes to non-Technical placeholder items.
 
 ---
 
