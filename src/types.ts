@@ -8,6 +8,14 @@ export type Cluster = 'Technical' | 'Business' | 'Social' | 'Droit';
 
 export const ALL_CLUSTERS: Cluster[] = ['Technical', 'Business', 'Social', 'Droit'];
 
+// Big Five traits used for personality scoring and dual-tagging on
+// interest/aptitude options. Neuroticism deliberately excluded (Section 2.4).
+export type BigFiveTrait =
+  | 'Openness'
+  | 'Conscientiousness'
+  | 'Extraversion'
+  | 'Agreeableness';
+
 // --- Interest items (Section 5: forced-choice, each option tagged to a
 // different cluster, no right/wrong) ---
 
@@ -48,12 +56,6 @@ export interface AptitudeItem {
 // tagged to a Big Five trait, no right/wrong). Neuroticism deliberately
 // excluded from cluster-fit items per Section 2.4 — it's earmarked for the
 // colleague's complementary readiness scale, not this tool. ---
-
-export type BigFiveTrait =
-  | 'Openness'
-  | 'Conscientiousness'
-  | 'Extraversion'
-  | 'Agreeableness';
 
 export interface PersonalityOption {
   id: string;
