@@ -4,6 +4,10 @@
 // - int-2, int-3, int-4 and the Business / Social / Droit aptitude + personality items
 //   remain placeholders only — generated to exercise the scoring functions, not final
 //   wording or validated "correct instinct" answers.
+// - specialtyDisambiguationInterestItems (t-int-2/3/4) are also real content from
+//   Technical_Cluster_FINAL.md, kept in a SEPARATE export on purpose (both options
+//   share cluster: 'Technical', so feeding them into computeInterestScores would
+//   corrupt Step 1 scores and the equal-appearances balance).
 // Researcher Claude's actual item banks will progressively replace the remaining
 // placeholders; nothing still marked placeholder should be treated as final.
 
@@ -48,16 +52,52 @@ export const placeholderInterestItems: InterestItem[] = [
   },
 ];
 
+// Specialty-disambiguation items — real content (Technical_Cluster_FINAL.md),
+// kept OUT of placeholderInterestItems on purpose. Both options on each of
+// these share cluster: 'Technical', so if they fed computeInterestScores
+// directly they'd silently corrupt Step 1 (guaranteed Technical win on every
+// response, plus wrecking the equal-appearances-per-cluster balance). They
+// carry real `specialty` tags for whenever the Section 5 "Ranking to a final
+// specialty list" step 2 function gets built to actually consume them —
+// metadata-only until then, per Manager's schema resolution.
+export const specialtyDisambiguationInterestItems: InterestItem[] = [
+  {
+    id: 't-int-2',
+    scenario: "You're helping run sign-ups for a small event.",
+    options: [
+      { id: 't-int-2-a', text: "You spend your time improving the sign-up form so it's smoother and can handle more people at once.", cluster: 'Technical', specialty: 'Informatique-SI' },
+      { id: 't-int-2-b', text: 'You spend your time watching for suspicious duplicate entries or people trying to grab extra spots.', cluster: 'Technical', specialty: 'Sécurité-SI' },
+    ],
+  },
+  {
+    id: 't-int-3',
+    scenario: "A remote-control car stops responding properly — sometimes it turns when you're not touching the controller.",
+    options: [
+      { id: 't-int-3-a', text: 'You open it up and check the wiring and connections, testing each part with your hands.', cluster: 'Technical', specialty: 'Électronique' },
+      { id: 't-int-3-b', text: "You look up whether it's a known issue with the control signal and try reconfiguring it.", cluster: 'Technical', specialty: 'Informatique-SI ou Sécurité-SI' },
+    ],
+  },
+  {
+    id: 't-int-4',
+    scenario: 'Your group project has several moving parts due at the same time (design, writing, presentation).',
+    options: [
+      { id: 't-int-4-a', text: "You take charge of tracking what's done, what's late, and reassigning tasks so nothing falls through.", cluster: 'Technical', specialty: 'Informatique-SI', trait: 'Extraversion' },
+      { id: 't-int-4-b', text: "You'd rather stay focused on your one piece and get it as good as possible, letting someone else handle the overall plan.", cluster: 'Technical' },
+    ],
+  },
+];
+
 // Aptitude items.
 // Technical: 4 real items (sourced from Technical_Cluster_FINAL.md).
 // Business / Social / Droit: still one placeholder each.
+// Two Technical correct-instinct options carry trait: 'Conscientiousness'.
 export const placeholderAptitudeItems: AptitudeItem[] = [
   {
     id: 'apt-technical-1',
     targetCluster: 'Technical',
     scenario: 'The wifi at home suddenly stops working for everyone.',
     options: [
-      { id: 'apt-technical-1-a', text: "You check the router lights, then test one device at a time to see if it's a single-device problem or a whole-network problem.", isCorrectInstinct: true },
+      { id: 'apt-technical-1-a', text: "You check the router lights, then test one device at a time to see if it's a single-device problem or a whole-network problem.", isCorrectInstinct: true, trait: 'Conscientiousness' },
       { id: 'apt-technical-1-b', text: 'You restart everything at once and hope it works.', isCorrectInstinct: false },
       { id: 'apt-technical-1-c', text: 'You wait for it to fix itself, or ask someone else to deal with it.', isCorrectInstinct: false },
     ],
@@ -77,7 +117,7 @@ export const placeholderAptitudeItems: AptitudeItem[] = [
     targetCluster: 'Technical',
     scenario: 'A ceiling lamp at home starts flickering.',
     options: [
-      { id: 'apt-technical-3-a', text: 'You check the bulb, then the socket, then the switch, one at a time, in that order.', isCorrectInstinct: true },
+      { id: 'apt-technical-3-a', text: 'You check the bulb, then the socket, then the switch, one at a time, in that order.', isCorrectInstinct: true, trait: 'Conscientiousness' },
       { id: 'apt-technical-3-b', text: "You start poking at whatever's easiest to reach first, to see if that fixes it.", isCorrectInstinct: false },
       { id: 'apt-technical-3-c', text: "You ask someone who deals with electrical stuff a lot to take a look, since it's their thing.", isCorrectInstinct: false },
     ],
