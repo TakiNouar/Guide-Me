@@ -99,22 +99,58 @@ export function getGradeModifier(cluster: Cluster, profile: StudentProfile): num
  * Trait_Score(trait) = (times trait-linked option chosen) / (times trait appeared) x 100
  * Attached to the final result as a working-style descriptor only — never
  * a pass/fail branch (Section 2.4 / Section 5, Step 4).
+ *
+ * Dual-tagging extension: also scans InterestOption and AptitudeOption for
+ * optional `trait` tags. Only options that actually carry a trait contribute
+ * to appearances/picks; untagged options are skipped entirely (not treated
+ * as zero-signal data points).
  */
 export function computePersonalityScores(
-  items: PersonalityItem[],
-  responses: StudentResponse[]
+  personalityItems: PersonalityItem[],
+  personalityResponses: StudentResponse[],
+  interestItems: InterestItem[],
+  interestResponses: StudentResponse[],
+  aptitudeItems: AptitudeItem[],
+  aptitudeResponses: StudentResponse[]
 ): Partial<Record<BigFiveTrait, number>> {
   const appearances: Partial<Record<BigFiveTrait, number>> = {};
   const picks: Partial<Record<BigFiveTrait, number>> = {};
 
-  for (const item of items) {
+  // Personality items — every option always has a trait.
+  for (const item of personalityItems) {
     for (const option of item.options) {
       appearances[option.trait] = (appearances[option.trait] ?? 0) + 1;
     }
-    const response = findResponse(responses, item.id);
+    const response = findResponse(personalityResponses, item.id);
     if (!response) continue;
     const chosen = item.options.find((o) => o.id === response.chosenOptionId);
     if (!chosen) continue;
+    picks[chosen.trait] = (picks[chosen.trait] ?? 0) + 1;
+  }
+
+  // Interest items — only count options that carry an explicit trait tag.
+  for (const item of interestItems) {
+    for (const option of item.options) {
+      if (option.trait === undefined) continue;
+      appearances[option.trait] = (appearances[option.trait] ?? 0) + 1;
+    }
+    const response = findResponse(interestResponses, item.id);
+    if (!response) continue;
+    const chosen = item.options.find((o) => o.id === response.chosenOptionId);
+    if (!chosen || chosen.trait === undefined) continue;
+    picks[chosen.trait] = (picks[chosen.trait] ?? 0) + 1;
+  }
+
+  // Aptitude items — only count options that carry an explicit trait tag.
+  for (const item of aptitudeItems) {
+    for (const option of item.options) {
+      if (option.trait === undefined) continue;
+      appearances[option.trait] = (appearances[option.trait] ?? 0) + 1;
+    }
+    const response = findResponse(aptitudeResponses, item.id);
+    if (!response) continue;
+    const chosen = item.options.find((o) => o.id === response.chosenOptionId);
+    if (!chosen || chosen.trait === undefined) continue;
     picks[chosen.trait] = (picks[chosen.trait] ?? 0) + 1;
   }
 
