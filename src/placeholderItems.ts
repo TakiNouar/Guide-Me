@@ -1,14 +1,11 @@
-// Placeholder items only — per Manager's answer (Response v2, item #5),
-// generated to exercise the scoring functions, not real content.
-// Researcher Claude's actual item bank will replace this file entirely;
-// nothing here should be treated as final wording or final "correct
-// instinct" answers (those are informed guesses pending a pilot, per
-// report Section 9 item #6).
-//
-// Style loosely follows Section 10.5's worked examples. The laptop-breaks
-// (interest) and projector (aptitude) items are reused directly from the
-// report itself rather than invented, since they're already the project's
-// own reference examples.
+// Mixed status:
+// - Technical aptitude items (apt-technical-1..4) and the int-1 interest item are real
+//   content sourced from Technical_Cluster_FINAL.md (Researcher Claude approved batch).
+// - int-2, int-3, int-4 and the Business / Social / Droit aptitude + personality items
+//   remain placeholders only — generated to exercise the scoring functions, not final
+//   wording or validated "correct instinct" answers.
+// Researcher Claude's actual item banks will progressively replace the remaining
+// placeholders; nothing still marked placeholder should be treated as final.
 
 import { AptitudeItem, InterestItem, PersonalityItem } from './types';
 
@@ -19,10 +16,10 @@ import { AptitudeItem, InterestItem, PersonalityItem } from './types';
 export const placeholderInterestItems: InterestItem[] = [
   {
     id: 'int-1',
-    scenario: "A friend's laptop breaks the night before a big deadline.",
+    scenario: "A friend's bike chain keeps slipping off halfway through your ride together.",
     options: [
-      { id: 'int-1-a', text: 'You try to find out why — you check one thing at a time until you find the problem.', cluster: 'Technical' },
-      { id: 'int-1-b', text: 'You stay with your friend, help them feel calm, and find a solution together.', cluster: 'Social' },
+      { id: 'int-1-a', text: "You get off, turn the bike over, and work through the gears one at a time until you find exactly where it's slipping.", cluster: 'Technical' },
+      { id: 'int-1-b', text: 'You suggest walking it to the nearest shop and asking someone there to take a look.', cluster: 'Social' },
     ],
   },
   {
@@ -51,18 +48,48 @@ export const placeholderInterestItems: InterestItem[] = [
   },
 ];
 
-// Aptitude items — one per cluster, disguised as everyday scenarios,
-// never as an obvious school-subject test (Section 2.3's critical design
-// rule). "Correct instinct" flags below are placeholders, not validated.
+// Aptitude items.
+// Technical: 4 real items (sourced from Technical_Cluster_FINAL.md).
+// Business / Social / Droit: still one placeholder each.
 export const placeholderAptitudeItems: AptitudeItem[] = [
   {
     id: 'apt-technical-1',
     targetCluster: 'Technical',
-    scenario: "Movie night. The projector won't connect. You already tried a new cable.",
+    scenario: 'The wifi at home suddenly stops working for everyone.',
     options: [
-      { id: 'apt-technical-1-a', text: 'You check the settings, one by one, until you find the problem.', isCorrectInstinct: true },
-      { id: 'apt-technical-1-b', text: 'You ask someone who "knows computers" to fix it.', isCorrectInstinct: false },
-      { id: 'apt-technical-1-c', text: 'You give up and just watch on a laptop.', isCorrectInstinct: false },
+      { id: 'apt-technical-1-a', text: "You check the router lights, then test one device at a time to see if it's a single-device problem or a whole-network problem.", isCorrectInstinct: true },
+      { id: 'apt-technical-1-b', text: 'You restart everything at once and hope it works.', isCorrectInstinct: false },
+      { id: 'apt-technical-1-c', text: 'You wait for it to fix itself, or ask someone else to deal with it.', isCorrectInstinct: false },
+    ],
+  },
+  {
+    id: 'apt-technical-2',
+    targetCluster: 'Technical',
+    scenario: "You're added to a group chat you don't recognize, and it starts asking members to click a link to \"confirm their spot\" in an event.",
+    options: [
+      { id: 'apt-technical-2-a', text: 'You look closely at the link and how the message is phrased before doing anything — something about the pattern feels off.', isCorrectInstinct: true },
+      { id: 'apt-technical-2-b', text: "You click the link, since it's probably fine — most messages like this are.", isCorrectInstinct: false },
+      { id: 'apt-technical-2-c', text: 'You mention it to whoever runs the group and let them decide what to do about it.', isCorrectInstinct: false },
+    ],
+  },
+  {
+    id: 'apt-technical-3',
+    targetCluster: 'Technical',
+    scenario: 'A ceiling lamp at home starts flickering.',
+    options: [
+      { id: 'apt-technical-3-a', text: 'You check the bulb, then the socket, then the switch, one at a time, in that order.', isCorrectInstinct: true },
+      { id: 'apt-technical-3-b', text: "You start poking at whatever's easiest to reach first, to see if that fixes it.", isCorrectInstinct: false },
+      { id: 'apt-technical-3-c', text: "You ask someone who deals with electrical stuff a lot to take a look, since it's their thing.", isCorrectInstinct: false },
+    ],
+  },
+  {
+    id: 'apt-technical-4',
+    targetCluster: 'Technical',
+    scenario: "You're building something (a form, a schedule, a small app) for a group of 30+ people to use.",
+    options: [
+      { id: 'apt-technical-4-a', text: 'Before finishing, you think through what happens if two people try to do the same thing at once, or what happens with unusual inputs.', isCorrectInstinct: true },
+      { id: 'apt-technical-4-b', text: 'You build the straightforward version first and only deal with edge cases if someone actually runs into one.', isCorrectInstinct: false },
+      { id: 'apt-technical-4-c', text: "You focus mainly on making it look good, since most people won't hit an edge case anyway.", isCorrectInstinct: false },
     ],
   },
   {
