@@ -1,4 +1,7 @@
 ## 9. Open Next Steps
+
+**Plan update 2026-08-09:** Priority shifted to reaching a working end-to-end demo. Adaptive delivery (rule-based, not IRT — see Section 5.2) is being built now rather than deferred. Item #7 below (adaptive engine scope) is resolved as "rule-based v2-lite now, true IRT-calibrated CAT later once pilot data exists" — no longer an open decision.
+
 1. ~~Pull all 8 individual HIS Licence program pages~~ — **Done (Section 4.1).** All 8 verified for compétences acquises, débouchés, admission filière, and language of instruction; RIASEC codes revised accordingly.
 2. ~~Re-verify "Orientation et conseil"'s admission filière and language data~~ — **Done (Section 4.4).** Confirmed toutes filières confondues; language corrected to Arabic.
 3. Draft a fuller item bank: ~3-4 situational interest items + ~3-4 disguised aptitude items + personality-tagged items per cluster, grounded in the now-verified program content (Section 4.1) — including the E-commerce vs. Économie-Gestion "digital-creative vs. institutional-analytical" axis and the Psychologie Clinique vs. Orientation et conseil "clinical depth vs. institutional breadth" axis, both newly confirmed by real text.
