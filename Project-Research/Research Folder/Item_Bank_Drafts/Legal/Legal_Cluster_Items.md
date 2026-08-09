@@ -21,11 +21,11 @@ A group project deadline is approaching and the team still hasn’t agreed on a 
 
 **A)** You propose mapping out exactly who is responsible for which part, with checkpoints and a written summary everyone can refer to. *(Legal lean)* **[Conscientiousness]**
 
-**B)** You suggest a quick brainstorm of the most interesting angles and then just start producing content so momentum builds. *(Technical/creative lean)*
+**B)** You suggest a quick brainstorm of the most interesting angles and then just start producing content so momentum builds. *(Business/Enterprising lean)*
 
 ---
 
-## L-APT-1
+## L-APT-1 (original — superseded by revision)
 
 Two classmates disagree about whether a shared online document they both edited can still be used after one of them later claimed the other went beyond what was agreed.
 
@@ -56,8 +56,8 @@ A neighborhood group chat is arguing about whether a recently posted “house ru
 ## Self-review
 
 - **L-INT-1:** Both options read as legitimate priorities (procedural rigor vs. relational fairness); neither is a failure or lazy answer. Cluster-gate function is clear (Legal vs. Social). No telegraph of “law.”
-- **L-INT-2:** Both options are positive and realistic student behaviors; A is structured/rule-oriented without being the only “serious” choice. No telegraph.
-- **L-APT-1:** All three options are defensible instincts; none defaults to “ask an adult/authority.” Competency tie is to the listed “qualification en droit public” (analysis of agreement, consent, records). Mild residual uncertainty: whether the document-edit scenario feels slightly closer to private-agreement thinking than pure public-law institutional reasoning, but the underlying analytic habit is the same.
-- **L-APT-2:** All three options are legitimate; no apathetic or deferral filler. Competency claim stays within the verified list (qualification en droit public + institutional/rule analysis). No telegraph of courts or formal law.
+- **L-INT-2:** Label corrected (Instruction 02) from Technical/creative to Business/Enterprising. Both options remain positive and realistic. No telegraph.
+- **L-APT-1 (original):** Superseded by the revised version in Legal_Cluster_Revision.md; retained here only for history.
+- **L-APT-2:** All three options are legitimate; no apathetic or deferral filler. Competency claim stays within the verified list. No telegraph of courts or formal law.
 
 No additional competencies or outcomes were assumed beyond those stated in the instruction.
