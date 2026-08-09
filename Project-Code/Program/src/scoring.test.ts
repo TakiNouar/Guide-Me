@@ -245,3 +245,225 @@ describe('computePersonalityScores', () => {
     expect(Object.keys(scores)).toEqual(['Extraversion']);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Edge-case hardening — documents current behavior only, does not change it.
+// ---------------------------------------------------------------------------
+
+describe('edge cases — unknown itemId is silently ignored', () => {
+  // Each scoring function looks up a response per item via findResponse.
+  // A response whose itemId matches no item is never found and has no effect.
+
+  it('computeInterestScores: unknown itemId mixed with valid responses has no effect', () => {
+    const validOnly = [
+      { itemId: 'int-1', chosenOptionId: 'int-1-a' }, // Technical
+      { itemId: 'int-3', chosenOptionId: 'int-3-b' }, // Droit
+    ];
+    const withUnknown = [
+      ...validOnly,
+      { itemId: 'does-not-exist', chosenOptionId: 'whatever' },
+    ];
+
+    const scoresValid = computeInterestScores(placeholderInterestItems, validOnly);
+    const scoresMixed = computeInterestScores(placeholderInterestItems, withUnknown);
+
+    expect(scoresMixed).toEqual(scoresValid);
+    expect(scoresMixed).toEqual({
+      Technical: 50,
+      Business: 0,
+      Social: 0,
+      Droit: 50,
+    });
+  });
+
+  it('computeAptitudeScores: unknown itemId mixed with valid responses has no effect', () => {
+    const validOnly = [
+      { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }, // correct
+      { itemId: 'apt-business-1', chosenOptionId: 'apt-business-1-b' }, // incorrect
+    ];
+    const withUnknown = [
+      ...validOnly,
+      { itemId: 'does-not-exist', chosenOptionId: 'whatever' },
+    ];
+
+    const scoresValid = computeAptitudeScores(placeholderAptitudeItems, validOnly);
+    const scoresMixed = computeAptitudeScores(placeholderAptitudeItems, withUnknown);
+
+    expect(scoresMixed).toEqual(scoresValid);
+    // 1 of 4 Technical correct → 25; Business incorrect → 0; others unanswered → 0
+    expect(scoresMixed.Technical).toBe(25);
+    expect(scoresMixed.Business).toBe(0);
+  });
+
+  it('computePersonalityScores: unknown itemId mixed with valid responses has no effect', () => {
+    const validOnly = [
+      { itemId: 'per-1', chosenOptionId: 'per-1-a' }, // Conscientiousness
+    ];
+    const withUnknown = [
+      ...validOnly,
+      { itemId: 'does-not-exist', chosenOptionId: 'whatever' },
+    ];
+
+    const scoresValid = computePersonalityScores(
+      placeholderPersonalityItems,
+      validOnly,
+      [],
+      [],
+      [],
+      []
+    );
+    const scoresMixed = computePersonalityScores(
+      placeholderPersonalityItems,
+      withUnknown,
+      [],
+      [],
+      [],
+      []
+    );
+
+    expect(scoresMixed).toEqual(scoresValid);
+    // per-1-a picked; Extraversion still appears (from per-1-b) with 0 picks
+    expect(scoresMixed.Conscientiousness).toBe(100);
+    expect(scoresMixed.Extraversion).toBe(0);
+  });
+});
+
+describe('edge cases — duplicate responses: first match wins', () => {
+  // findResponse uses Array.prototype.find → first matching itemId wins;
+  // later duplicates for the same itemId are never consulted.
+
+  it('computeInterestScores: first duplicate wins (Technical first, Social second → Technical)', () => {
+    // int-1-a = Technical, int-1-b = Social. First entry should win.
+    const responses = [
+      { itemId: 'int-1', chosenOptionId: 'int-1-a' }, // first → Technical
+      { itemId: 'int-1', chosenOptionId: 'int-1-b' }, // second → Social (ignored)
+    ];
+
+    const scores = computeInterestScores(placeholderInterestItems, responses);
+
+    // Only int-1 answered (Technical). Appearances still count all options.
+    // Technical: 1 win / 2 appearances = 50; Social: 0 / 2 = 0
+    expect(scores.Technical).toBe(50);
+    expect(scores.Social).toBe(0);
+
+    // Confirm it matches the first-only result, not the second-only result
+    const firstOnly = computeInterestScores(placeholderInterestItems, [
+      { itemId: 'int-1', chosenOptionId: 'int-1-a' },
+    ]);
+    const secondOnly = computeInterestScores(placeholderInterestItems, [
+      { itemId: 'int-1', chosenOptionId: 'int-1-b' },
+    ]);
+    expect(scores).toEqual(firstOnly);
+    expect(scores).not.toEqual(secondOnly);
+  });
+
+  it('computeAptitudeScores: first duplicate wins (correct first, incorrect second → correct)', () => {
+    const responses = [
+      { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }, // first → correct
+      { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-b' }, // second → incorrect (ignored)
+    ];
+
+    const scores = computeAptitudeScores(placeholderAptitudeItems, responses);
+
+    // 1 of 4 Technical correct → 25
+    expect(scores.Technical).toBe(25);
+
+    const firstOnly = computeAptitudeScores(placeholderAptitudeItems, [
+      { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' },
+    ]);
+    const secondOnly = computeAptitudeScores(placeholderAptitudeItems, [
+      { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-b' },
+    ]);
+    expect(scores).toEqual(firstOnly);
+    expect(scores.Technical).not.toBe(secondOnly.Technical); // secondOnly → 0
+  });
+
+  it('computePersonalityScores: first duplicate wins (Conscientiousness first, Extraversion second)', () => {
+    const responses = [
+      { itemId: 'per-1', chosenOptionId: 'per-1-a' }, // first → Conscientiousness
+      { itemId: 'per-1', chosenOptionId: 'per-1-b' }, // second → Extraversion (ignored)
+    ];
+
+    const scores = computePersonalityScores(
+      placeholderPersonalityItems,
+      responses,
+      [],
+      [],
+      [],
+      []
+    );
+
+    expect(scores.Conscientiousness).toBe(100);
+    expect(scores.Extraversion).toBe(0);
+
+    const firstOnly = computePersonalityScores(
+      placeholderPersonalityItems,
+      [{ itemId: 'per-1', chosenOptionId: 'per-1-a' }],
+      [],
+      [],
+      [],
+      []
+    );
+    const secondOnly = computePersonalityScores(
+      placeholderPersonalityItems,
+      [{ itemId: 'per-1', chosenOptionId: 'per-1-b' }],
+      [],
+      [],
+      [],
+      []
+    );
+    expect(scores).toEqual(firstOnly);
+    expect(scores).not.toEqual(secondOnly);
+  });
+});
+
+describe('edge cases — unknown chosenOptionId for a valid itemId is skipped', () => {
+  // Item is found, but option lookup returns undefined → if (!chosen) continue.
+  // Different code path from unknown itemId (item found, option not found).
+
+  it('computeInterestScores: unknown chosenOptionId is skipped (no win credited)', () => {
+    const responses = [
+      { itemId: 'int-1', chosenOptionId: 'not-a-real-option' },
+    ];
+
+    const scores = computeInterestScores(placeholderInterestItems, responses);
+
+    // Appearances still counted; no wins → all zeros for interest clusters that appeared
+    expect(scores).toEqual({
+      Technical: 0,
+      Business: 0,
+      Social: 0,
+      Droit: 0,
+    });
+  });
+
+  it('computeAptitudeScores: unknown chosenOptionId is skipped (not counted as correct)', () => {
+    const responses = [
+      { itemId: 'apt-technical-1', chosenOptionId: 'not-a-real-option' },
+    ];
+
+    const scores = computeAptitudeScores(placeholderAptitudeItems, responses);
+
+    // Item counted in total, but chosen is undefined → not correct → 0/4 = 0
+    expect(scores.Technical).toBe(0);
+  });
+
+  it('computePersonalityScores: unknown chosenOptionId is skipped (no pick credited)', () => {
+    const responses = [
+      { itemId: 'per-1', chosenOptionId: 'not-a-real-option' },
+    ];
+
+    const scores = computePersonalityScores(
+      placeholderPersonalityItems,
+      responses,
+      [],
+      [],
+      [],
+      []
+    );
+
+    // Appearances from per-1 options still counted; no picks → 0 for both traits
+    expect(scores.Conscientiousness).toBe(0);
+    expect(scores.Extraversion).toBe(0);
+  });
+});
