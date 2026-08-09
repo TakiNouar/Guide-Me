@@ -73,3 +73,13 @@ Every output label from the decision matrix above should hand the advisor a matc
 **Source:** Sampson, Peterson, Reardon & Lenz — Cognitive Information Processing (CIP) theory, Florida State University Career Center. Full case-type detail (situation descriptions in full) retained in the standalone Wider Research Findings report, Section 3.
 
 ---
+
+### 5.2 Adaptive Delivery ("v2-lite") — added 2026-08-09
+
+Following a plan change (accelerating toward a working demo), adaptive delivery is being built now rather than deferred as a distant "v2." This is explicitly **rule-based adaptive delivery, not IRT-calibrated CAT** — the distinction matters and should never be blurred:
+
+- **Phase 1 (broad scan):** every student answers all 6 cluster-gate interest items, establishing an initial per-cluster Interest_Score.
+- **Branch point:** the leading cluster (or clusters, if within a small margin — placeholder threshold, pending real data the same way 70/40 are) determines what's shown next.
+- **Phase 2 (targeted):** only the winning cluster's specialty-disambiguation interest items and aptitude items are shown — not all 26 items to every student.
+- **Why not full IRT:** true IRT-calibrated CAT requires item difficulty/discrimination parameters derived from real pilot response data, which doesn't exist yet. Building simulated IRT math without real calibration data would produce false statistical rigor — this project's standard has consistently been "flag what's unvalidated" rather than dress up placeholders as more rigorous than they are (see Section 2.2's original honest tradeoff framing). This rule-based approach delivers a genuinely adaptive experience now, while staying honest about what it is and isn't.
+- **Future path to true v2:** once pilot data exists, this rule-based branch point can be replaced with real IRT-based selection without changing the surrounding architecture — the same upgrade path noted when adaptive testing was first proposed.
