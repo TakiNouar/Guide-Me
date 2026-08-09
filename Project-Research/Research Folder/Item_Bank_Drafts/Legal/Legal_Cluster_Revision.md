@@ -19,13 +19,13 @@ The class representative posts a short notice on the shared class noticeboard (a
 
 ---
 
-## L-INT-3
+## L-INT-3 (rewritten — Legal vs Technical)
 
 A popular student Discord server for sharing notes and exam tips is filling up with low-effort posts that bury the useful threads.
 
 **A)** You look at the existing server rules, how moderation decisions have been made so far, and whether those rules are being applied the same way to everyone. *(Legal/analytical-institutional lean)* **[Conscientiousness]**
 
-**B)** You start thinking of ways to redesign the channels, add pinned guides, or create incentive systems so high-quality posts stay visible and more students keep contributing. *(Business/Enterprising lean)*
+**B)** You start tracing how the posts are ordered and filtered — what determines which threads stay visible, whether the current sorting or notification setup is amplifying the noise, and what a cleaner structure would look like. *(Technical/Investigative lean)*
 
 ---
 
@@ -43,9 +43,9 @@ A local amateur football team’s group chat is arguing about whether an old inf
 
 ---
 
-## Self-review (post-Instruction 02)
+## Self-review (post-Instruction 03)
 
-- **L-APT-1 (revised, second pass):** Noticeboard + chat framing and explicit reference to “previous class notices of this kind” strengthen the institutional-promulgation reading and reduce the “just what this chat usually does” risk. Still disguised; no law/court language. All options remain legitimate.
-- **L-INT-3:** Unchanged; clean Legal vs. Business/Enterprising contrast.
-- **L-APT-3 (revised, second pass):** Setting swapped from school coordinator/makeup rule to amateur football team + new captain. Same research-depth structure, lower proximity to a direct institutional-school parallel. Competency claim stays within compétences de recherche approfondies. All options legitimate; no deferral filler.
-- Residual uncertainty: none major. If the football setting still feels slightly too close to “rules after a leadership change,” an alternative (e.g., neighborhood association or online community) can be swapped on request.
+- **L-APT-1 (revised, second pass):** Unchanged from Instruction 02 second pass. Institutional-promulgation framing holds.
+- **L-INT-3 (rewritten):** Full scenario kept (Discord server noise) because option A still fits a Legal/analytical-institutional lean (rules consistency / equal application). Option B completely rewritten from Business/Enterprising (redesign channels, incentives, momentum) to a Technical/Investigative instinct (trace ordering/filtering logic, diagnose what amplifies noise, consider structural fix). Both options remain legitimate alternate priorities; neither is a failure or apathetic choice. No telegraph of law or formal technical jargon. Completes the Legal-vs-Technical pairing that was previously missing.
+- **L-APT-3 (revised, second pass):** Unchanged. Football-team setting and research-depth rationale hold.
+- Residual uncertainty: none major on the new L-INT-3 pairing. If the “trace how posts are ordered and filtered” framing is judged too close to pure platform mechanics rather than a general Technical systems instinct, it can be adjusted.
