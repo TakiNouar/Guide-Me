@@ -11,7 +11,7 @@
 
 ## 1. Division of labor (explicit)
 
-I produced the test code only. **I have not run** `npx tsc --noEmit`, `npm start`, or `npm test`. Pass/fail verification is Coder Claude’s sole responsibility per Manager’s policy.
+I produced the test code only. I did not run `npx tsc --noEmit`, `npm start`, or `npm test` myself. Pass/fail verification is Coder Claude’s sole responsibility per Manager’s policy. Local verification results (Section 6) were supplied by Taki after the tests were written.
 
 ---
 
@@ -42,7 +42,7 @@ Item is found, but `item.options.find(...)` returns `undefined` → existing `if
 
 ## 3. Expected values (derived from reading the code, not from execution)
 
-These are the values the tests assert, based on static reading of `scoring.ts` and the current placeholder data. Coder Claude should confirm them against real execution.
+These are the values the tests assert, based on static reading of `scoring.ts` and the current placeholder data.
 
 | Case | Function | Key expected |
 |------|----------|--------------|
@@ -73,6 +73,69 @@ These are reasonable silent-ignore defaults for a scoring scaffold that assumes 
 ## 5. Process note
 
 This report is filed under `Project-Code/Coder Grok/` per the coordination system correction. Prior reports that landed in `Project-Code/Program/docs/` predate that rule; this and subsequent Coder Grok reports use this folder and the `CoderGrok_Report_0N_…` naming convention.
+
+---
+
+## 6. Local verification (run by Taki / Coder Claude)
+
+Commands run from `Project-Code/Program`:
+
+```
+npx tsc --noEmit
+npm start
+npm test
+```
+
+### 6.1 `npx tsc --noEmit`
+```
+npm notice run his-scoring-engine@0.1.0 npx
+npm notice run tsc --noEmit
+```
+(no type errors — clean)
+
+### 6.2 `npm start`
+```
+npm notice run his-scoring-engine@0.1.0 start
+npm notice run ts-node src/demo.ts
+--- HIS Orientation Test — Scoring Engine Scaffold Demo ---
+Student: Sample Student (Sciences expérimentales)
+Interest scores (Step 1): { Technical: 100, Business: 0, Social: 0, Droit: 100 }
+Aptitude scores (Step 2): { Technical: 100, Business: 0, Social: 100, Droit: 100 }
+Personality scores (Step 4): {
+  Conscientiousness: 100,
+  Extraversion: 0,
+  Openness: 100,
+  Agreeableness: 0
+}
+Ranked cluster recommendations (Step 5):
+1. Technical — Strong match (interest 100%, aptitude 100%, grade modifier 82.5)
+2. Droit — Strong match (interest 100%, aptitude 100%, grade modifier n/a)
+3. Business — Deprioritize (interest 0%, aptitude 0%, grade modifier n/a)
+4. Social — Possible hidden strength (interest 0%, aptitude 100%, grade modifier n/a)
+Personality qualifier: Working-style lean: Conscientiousness (100%) — descriptive only, not a fit judgment.
+--- Dual-tagging demo (t-int-4-a contributes Extraversion) ---
+Personality scores with interest-sourced Extraversion: {
+  Conscientiousness: 100,
+  Extraversion: 50,
+  Openness: 100,
+  Agreeableness: 0
+}
+```
+
+### 6.3 `npm test`
+```
+npm notice run his-scoring-engine@0.1.0 test
+npm notice run jest
+ PASS src/decisionMatrix.test.ts
+ PASS src/scoring.test.ts
+Test Suites: 2 passed, 2 total
+Tests: 39 passed, 39 total
+Snapshots: 0 total
+Time: 5.277 s
+Ran all test suites.
+```
+
+**Result: 39/39 tests passed** (30 existing + 9 new edge-case tests). tsc clean. Demo output unchanged and correct.
 
 ---
 
