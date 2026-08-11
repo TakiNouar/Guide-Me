@@ -29,19 +29,26 @@ const sampleStudent: StudentProfile = {
 
   interestResponses: [
     { itemId: 'int-1', chosenOptionId: 'int-1-a' }, // Technical (bike-chain diagnostic)
-    { itemId: 'int-2', chosenOptionId: 'int-2-a' }, // Technical
-    { itemId: 'int-3', chosenOptionId: 'int-3-b' }, // Droit
-    { itemId: 'int-4', chosenOptionId: 'int-4-b' }, // Droit
+    { itemId: 'int-2', chosenOptionId: 'int-2-a' }, // Technical (B-INT-1: fix bakery problem directly)
+    { itemId: 'int-3', chosenOptionId: 'int-3-b' }, // Droit (placeholder)
+    { itemId: 'int-4', chosenOptionId: 'int-4-b' }, // Droit (placeholder)
+    // int-5 (S-INT-1): arbitrary pick — neither option strongly fits the sample
+    // student's Technical/Conscientious persona; included to exercise the new item.
+    { itemId: 'int-5', chosenOptionId: 'int-5-a' }, // Business
   ],
 
   aptitudeResponses: [
-    { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }, // correct (+ Conscientiousness trait)
+    { itemId: 'apt-technical-1', chosenOptionId: 'apt-technical-1-a' }, // correct (+ Conscientiousness)
     { itemId: 'apt-technical-2', chosenOptionId: 'apt-technical-2-a' }, // correct
-    { itemId: 'apt-technical-3', chosenOptionId: 'apt-technical-3-a' }, // correct (+ Conscientiousness trait)
+    { itemId: 'apt-technical-3', chosenOptionId: 'apt-technical-3-a' }, // correct (+ Conscientiousness)
     { itemId: 'apt-technical-4', chosenOptionId: 'apt-technical-4-a' }, // correct
-    { itemId: 'apt-business-1', chosenOptionId: 'apt-business-1-b' },  // not correct
-    { itemId: 'apt-social-1', chosenOptionId: 'apt-social-1-a' },       // correct
-    { itemId: 'apt-droit-1', chosenOptionId: 'apt-droit-1-a' },         // correct
+    { itemId: 'apt-business-1', chosenOptionId: 'apt-business-1-a' }, // correct
+    { itemId: 'apt-business-2', chosenOptionId: 'apt-business-2-a' }, // correct (+ Openness)
+    { itemId: 'apt-business-3', chosenOptionId: 'apt-business-3-a' }, // correct (+ Conscientiousness)
+    { itemId: 'apt-social-1', chosenOptionId: 'apt-social-1-a' }, // correct (+ Agreeableness)
+    { itemId: 'apt-social-2', chosenOptionId: 'apt-social-2-a' }, // correct (+ Openness)
+    { itemId: 'apt-social-3', chosenOptionId: 'apt-social-3-a' }, // correct (+ Extraversion)
+    { itemId: 'apt-droit-1', chosenOptionId: 'apt-droit-1-a' }, // correct (placeholder)
   ],
 
   personalityResponses: [
@@ -55,8 +62,6 @@ function main() {
   const aptitudeScores = computeAptitudeScores(placeholderAptitudeItems, sampleStudent.aptitudeResponses);
 
   // Dual-tagging path: personality items + interest/aptitude options that carry trait tags.
-  // Sample student's correct answers on apt-technical-1 and apt-technical-3 now also
-  // contribute to Conscientiousness (those options are trait-tagged).
   const personalityScores = computePersonalityScores(
     placeholderPersonalityItems,
     sampleStudent.personalityResponses,
@@ -89,9 +94,6 @@ function main() {
   console.log(`\nPersonality qualifier: ${personalityQualifier}`);
 
   // --- Dual-tagging demonstration (InterestOption-sourced trait) ---
-  // Sample student also answers t-int-4-a from specialtyDisambiguationInterestItems.
-  // That option carries trait: 'Extraversion', so Extraversion's contribution here
-  // comes from an interest item, not a dedicated personality item.
   const dualTagInterestResponses = [
     { itemId: 't-int-4', chosenOptionId: 't-int-4-a' }, // Extraversion via interest option
   ];
