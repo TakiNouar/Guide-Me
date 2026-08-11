@@ -1,3 +1,5 @@
+# SUPERSEDED — see Manager Report 06 / Item_Bank_Drafts/Technical/Technical_Cluster_FINAL.md for authoritative content. Kept for reference only, not used in compilation.
+
 # Technical Cluster Item Bank — HIS Orientation Test
 
 Project: HIS Orientation Test | Cluster: Technical (Informatique-SI, Sécurité-SI, Électronique)  
