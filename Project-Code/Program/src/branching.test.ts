@@ -120,7 +120,6 @@ describe('getPhase2ItemsForClusters', () => {
       'apt-technical-4',
     ]);
 
-    // Nothing from other clusters
     for (const item of aptitudeItems) {
       expect(item.targetCluster).toBe('Technical');
     }
@@ -132,25 +131,31 @@ describe('getPhase2ItemsForClusters', () => {
       'Business',
     ]);
 
-    // Technical specialty-disambiguation items present
-    const interestIds = interestItems.map((i) => i.id);
-    expect(interestIds).toContain('t-int-2');
-    expect(interestIds).toContain('t-int-3');
-    expect(interestIds).toContain('t-int-4');
+    const interestIds = interestItems.map((i) => i.id).sort();
+    // Technical specialty items + Business specialty items (now real)
+    expect(interestIds).toEqual(['b-int-2', 'b-int-3', 't-int-2', 't-int-3', 't-int-4']);
 
-    // Business has no specialty-disambiguation items yet → no extra interest items
-    expect(interestItems.every((i) => i.options[0]?.cluster === 'Technical')).toBe(true);
-
-    // Technical aptitude items + Business placeholder aptitude item
-    const aptitudeIds = aptitudeItems.map((i) => i.id);
+    const aptitudeIds = aptitudeItems.map((i) => i.id).sort();
     expect(aptitudeIds).toContain('apt-technical-1');
     expect(aptitudeIds).toContain('apt-technical-2');
     expect(aptitudeIds).toContain('apt-technical-3');
     expect(aptitudeIds).toContain('apt-technical-4');
     expect(aptitudeIds).toContain('apt-business-1');
+    expect(aptitudeIds).toContain('apt-business-2');
+    expect(aptitudeIds).toContain('apt-business-3');
 
     // No Social or Droit aptitude
     expect(aptitudeIds).not.toContain('apt-social-1');
     expect(aptitudeIds).not.toContain('apt-droit-1');
+  });
+
+  it('returns Social specialty-disambiguation + aptitude items for [Social]', () => {
+    const { interestItems, aptitudeItems } = getPhase2ItemsForClusters(['Social']);
+
+    const interestIds = interestItems.map((i) => i.id).sort();
+    expect(interestIds).toEqual(['s-int-2', 's-int-3']);
+
+    const aptitudeIds = aptitudeItems.map((i) => i.id).sort();
+    expect(aptitudeIds).toEqual(['apt-social-1', 'apt-social-2', 'apt-social-3']);
   });
 });
