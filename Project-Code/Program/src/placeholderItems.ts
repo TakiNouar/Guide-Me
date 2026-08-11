@@ -1,22 +1,24 @@
 // Mixed status:
-// - Technical aptitude items (apt-technical-1..4) and the int-1 interest item are real
-//   content sourced from Technical_Cluster_FINAL.md (Researcher Claude approved batch).
-// - int-2, int-3, int-4 and the Business / Social / Droit aptitude + personality items
-//   remain placeholders only — generated to exercise the scoring functions, not final
-//   wording or validated "correct instinct" answers.
-// - specialtyDisambiguationInterestItems (t-int-2/3/4) are also real content from
-//   Technical_Cluster_FINAL.md, kept in a SEPARATE export on purpose (both options
-//   share cluster: 'Technical', so feeding them into computeInterestScores would
-//   corrupt Step 1 scores and the equal-appearances balance).
-// Researcher Claude's actual item banks will progressively replace the remaining
-// placeholders; nothing still marked placeholder should be treated as final.
+// - Technical: aptitude (apt-technical-1..4), int-1, and specialty-disambiguation
+//   (t-int-2/3/4) are real content from Technical_Cluster_FINAL.md.
+// - Business: aptitude (apt-business-1..3), int-2 (B-INT-1), and specialty-
+//   disambiguation (b-int-2/3) are real content from Business_Cluster_Items.md.
+// - Social: aptitude (apt-social-1..3), int-5 (S-INT-1), and specialty-
+//   disambiguation (s-int-2/3) are real content from Social_Cluster_Items.md.
+// - int-3 (Business–Droit) and int-4 (Social–Droit) remain placeholders — held
+//   pending Legal clearance (Legal-authored gate items L-INT-1/2/3).
+// - Droit aptitude (apt-droit-1) remains a placeholder.
+// - Legal cluster content is intentionally NOT present anywhere in this file.
+// - specialtyDisambiguationInterestItems is kept SEPARATE from
+//   placeholderInterestItems on purpose (same-cluster options would corrupt
+//   Step 1 scores if fed into computeInterestScores).
 
 import { AptitudeItem, InterestItem, PersonalityItem } from './types';
 
-// Interest items — balanced so each of the 4 clusters appears exactly
-// twice across the set, per Section 5's "Structural note for v1"
-// (equal appearances per cluster needed for v1's normalization to be a
-// real fix rather than compensating for a design flaw).
+// Interest items — cluster-gate set.
+// Current real count: 3 of 6 (int-1 Technical–Social, int-2 Technical–Business,
+// int-5 Business–Social). int-3/int-4 stay as placeholders until Legal clears.
+// Transitional appearance imbalance: Technical 2, Business 3, Social 3, Droit 2.
 export const placeholderInterestItems: InterestItem[] = [
   {
     id: 'int-1',
@@ -27,14 +29,17 @@ export const placeholderInterestItems: InterestItem[] = [
     ],
   },
   {
+    // B-INT-1 — option order kept a=Technical / b=Business to match original
+    // placeholder convention (source letter order is the reverse).
     id: 'int-2',
-    scenario: "Your school club needs to launch a small online store to sell fundraiser items.",
+    scenario: 'A local bakery near your neighborhood is struggling to attract customers.',
     options: [
-      { id: 'int-2-a', text: 'You want to build and test the store platform yourself, page by page.', cluster: 'Technical' },
-      { id: 'int-2-b', text: 'You want to plan the pricing, budget, and rollout strategy.', cluster: 'Business' },
+      { id: 'int-2-a', text: "You ask the owner what's actually going wrong day-to-day and try to help fix that specific problem directly.", cluster: 'Technical' },
+      { id: 'int-2-b', text: 'You start thinking of ways to promote it and grow its customer base — social media, deals, events.', cluster: 'Business' },
     ],
   },
   {
+    // Placeholder — Business–Droit gate; held pending Legal (L-INT-2).
     id: 'int-3',
     scenario: 'A new local regulation threatens to shut down a neighborhood market your family relies on.',
     options: [
@@ -43,6 +48,7 @@ export const placeholderInterestItems: InterestItem[] = [
     ],
   },
   {
+    // Placeholder — Social–Droit gate; held pending Legal (L-INT-1).
     id: 'int-4',
     scenario: 'A classmate feels they were treated unfairly by a teacher over a grade dispute.',
     options: [
@@ -50,17 +56,24 @@ export const placeholderInterestItems: InterestItem[] = [
       { id: 'int-4-b', text: 'You help them find the official appeal procedure and build their case.', cluster: 'Droit' },
     ],
   },
+  {
+    // S-INT-1 — option order set a=Business / b=Social per wiring instruction
+    // (source letter order is the reverse).
+    id: 'int-5',
+    scenario: 'A friend has been quiet and withdrawn for the past few weeks.',
+    options: [
+      { id: 'int-5-a', text: 'You suggest a plan to get them out and busy — signing up for a club or activity together.', cluster: 'Business' },
+      { id: 'int-5-b', text: "You make time to sit with them one-on-one and gently ask what's going on beneath the surface.", cluster: 'Social' },
+    ],
+  },
 ];
 
-// Specialty-disambiguation items — real content (Technical_Cluster_FINAL.md),
-// kept OUT of placeholderInterestItems on purpose. Both options on each of
-// these share cluster: 'Technical', so if they fed computeInterestScores
-// directly they'd silently corrupt Step 1 (guaranteed Technical win on every
-// response, plus wrecking the equal-appearances-per-cluster balance). They
-// carry real `specialty` tags for whenever the Section 5 "Ranking to a final
-// specialty list" step 2 function gets built to actually consume them —
-// metadata-only until then, per Manager's schema resolution.
+// Specialty-disambiguation items — real content, kept OUT of
+// placeholderInterestItems on purpose. Both options on each item share the
+// same cluster, so feeding them into computeInterestScores would corrupt
+// Step 1. Metadata-only until the Section 5 specialty-ranking step is built.
 export const specialtyDisambiguationInterestItems: InterestItem[] = [
+  // --- Technical (from Technical_Cluster_FINAL.md) ---
   {
     id: 't-int-2',
     scenario: "You're helping run sign-ups for a small event.",
@@ -85,13 +98,46 @@ export const specialtyDisambiguationInterestItems: InterestItem[] = [
       { id: 't-int-4-b', text: "You'd rather stay focused on your one piece and get it as good as possible, letting someone else handle the overall plan.", cluster: 'Technical' },
     ],
   },
+  // --- Business (from Business_Cluster_Items.md) ---
+  {
+    id: 'b-int-2',
+    scenario: "You're put in charge of your class's fundraiser.",
+    options: [
+      { id: 'b-int-2-a', text: 'You focus on designing eye-catching posts and a fun online campaign to get people excited.', cluster: 'Business', specialty: 'E-commerce', trait: 'Openness' },
+      { id: 'b-int-2-b', text: "You focus on setting a budget, tracking who's paid, and making sure the numbers add up at the end.", cluster: 'Business', specialty: 'Économie-Gestion', trait: 'Conscientiousness' },
+    ],
+  },
+  {
+    id: 'b-int-3',
+    scenario: 'Your fundraiser idea grows bigger than expected and now needs a small team to run it.',
+    options: [
+      { id: 'b-int-3-a', text: 'You enjoy dividing up roles, keeping people motivated, and adjusting the plan as things change day to day.', cluster: 'Business', specialty: 'E-commerce', trait: 'Openness' },
+      { id: 'b-int-3-b', text: "You'd rather map out a clear plan beforehand that the team just follows, minimizing surprises.", cluster: 'Business', specialty: 'Économie-Gestion', trait: 'Conscientiousness' },
+    ],
+  },
+  // --- Social (from Social_Cluster_Items.md) ---
+  {
+    id: 's-int-2',
+    scenario: "You're asked to help a younger student who's been struggling this year.",
+    options: [
+      { id: 's-int-2-a', text: "You want to understand what's really going on for them personally — spend real time getting to the root of it, one-on-one.", cluster: 'Social', specialty: 'Psychologie Clinique', trait: 'Openness' },
+      { id: 's-int-2-b', text: 'You look at their overall situation — classes, teachers, workload — and think about what changes to their environment or schedule would help.', cluster: 'Social', specialty: 'Orientation et conseil', trait: 'Extraversion' },
+    ],
+  },
+  {
+    id: 's-int-3',
+    scenario: 'Over a semester, you keep being the person classmates come to for advice.',
+    options: [
+      { id: 's-int-3-a', text: 'You find yourself drawn to the deep, complicated cases — the ones with a lot going on underneath.', cluster: 'Social', specialty: 'Psychologie Clinique', trait: 'Openness' },
+      { id: 's-int-3-b', text: 'You find yourself naturally spotting patterns — noticing several people running into the same kind of problem and thinking about a general fix.', cluster: 'Social', specialty: 'Orientation et conseil', trait: 'Extraversion' },
+    ],
+  },
 ];
 
 // Aptitude items.
-// Technical: 4 real items (sourced from Technical_Cluster_FINAL.md).
-// Business / Social / Droit: still one placeholder each.
-// Two Technical correct-instinct options carry trait: 'Conscientiousness'.
+// Technical: 4 real. Business: 3 real. Social: 3 real. Droit: 1 placeholder.
 export const placeholderAptitudeItems: AptitudeItem[] = [
+  // --- Technical ---
   {
     id: 'apt-technical-1',
     targetCluster: 'Technical',
@@ -132,26 +178,69 @@ export const placeholderAptitudeItems: AptitudeItem[] = [
       { id: 'apt-technical-4-c', text: "You focus mainly on making it look good, since most people won't hit an edge case anyway.", isCorrectInstinct: false },
     ],
   },
+  // --- Business (B-APT-1/2/3 from Business_Cluster_Items.md) ---
   {
     id: 'apt-business-1',
     targetCluster: 'Business',
-    scenario: "You're running a table at a school fair and sales are way below budget by midday.",
+    scenario: 'You notice a lot of people at school complaining about the same small inconvenience (e.g., a long printer line).',
     options: [
-      { id: 'apt-business-1-a', text: "You recheck your price point and stock against similar tables, and adjust before the day's over.", isCorrectInstinct: true },
-      { id: 'apt-business-1-b', text: 'You keep the same setup and hope afternoon traffic picks up.', isCorrectInstinct: false },
-      { id: 'apt-business-1-c', text: 'You slash every price to whatever clears stock fastest, without checking why sales are slow.', isCorrectInstinct: false },
+      { id: 'apt-business-1-a', text: 'You start thinking about how you could actually fix or improve this for people.', isCorrectInstinct: true },
+      { id: 'apt-business-1-b', text: "You agree it's annoying but don't think further about it.", isCorrectInstinct: false },
+      { id: 'apt-business-1-c', text: "You mention it to a teacher and let them decide if it's worth fixing.", isCorrectInstinct: false },
     ],
   },
   {
-    id: 'apt-social-1',
-    targetCluster: 'Social',
-    scenario: "A friend tells you they're overwhelmed but insists everything is fine.",
+    id: 'apt-business-2',
+    targetCluster: 'Business',
+    scenario: "You're designing a flyer for a school event.",
     options: [
-      { id: 'apt-social-1-a', text: "You gently point out the specific pattern you've noticed and ask what's really going on.", isCorrectInstinct: true },
-      { id: 'apt-social-1-b', text: 'You take their word for it and change the subject.', isCorrectInstinct: false },
-      { id: 'apt-social-1-c', text: 'You tell them exactly what they should do to fix it.', isCorrectInstinct: false },
+      { id: 'apt-business-2-a', text: 'You imagine how someone scrolling past would react in the first two seconds, and design around grabbing their attention.', isCorrectInstinct: true, trait: 'Openness' },
+      { id: 'apt-business-2-b', text: 'You focus on making sure all the necessary information (date, time, location) is clearly and correctly included.', isCorrectInstinct: false },
+      { id: 'apt-business-2-c', text: 'You leave the design to someone else and focus on other tasks.', isCorrectInstinct: false },
     ],
   },
+  {
+    id: 'apt-business-3',
+    targetCluster: 'Business',
+    scenario: "You're deciding whether to keep paying for a club activity.",
+    options: [
+      { id: 'apt-business-3-a', text: "You work out roughly what it's costing you each month vs. what you're getting out of it before deciding.", isCorrectInstinct: true, trait: 'Conscientiousness' },
+      { id: 'apt-business-3-b', text: "You go with how you've been feeling about it lately — enjoying it or not.", isCorrectInstinct: false },
+      { id: 'apt-business-3-c', text: 'You ask a friend already in the club what they think you should do.', isCorrectInstinct: false },
+    ],
+  },
+  // --- Social (S-APT-1/2/3 from Social_Cluster_Items.md; S-APT-2 option C is the fixed version) ---
+  {
+    id: 'apt-social-1',
+    targetCluster: 'Social',
+    scenario: "A friend is telling you about a problem, but their words and their tone don't quite match.",
+    options: [
+      { id: 'apt-social-1-a', text: "You notice the mismatch and gently ask what's really going on, rather than just responding to their words.", isCorrectInstinct: true, trait: 'Agreeableness' },
+      { id: 'apt-social-1-b', text: 'You take what they say at face value and respond to that directly.', isCorrectInstinct: false },
+      { id: 'apt-social-1-c', text: 'You wait to see if they bring it up again on their own before saying anything.', isCorrectInstinct: false },
+    ],
+  },
+  {
+    id: 'apt-social-2',
+    targetCluster: 'Social',
+    scenario: "Someone tells you they've been having trouble sleeping lately.",
+    options: [
+      { id: 'apt-social-2-a', text: "You find yourself wondering what's underneath it — stress, something unsaid, a bigger pattern.", isCorrectInstinct: true, trait: 'Openness' },
+      { id: 'apt-social-2-b', text: 'You think of practical tips they could try tonight to sleep better.', isCorrectInstinct: false },
+      { id: 'apt-social-2-c', text: "You assume it's probably temporary and don't read much into it yet.", isCorrectInstinct: false },
+    ],
+  },
+  {
+    id: 'apt-social-3',
+    targetCluster: 'Social',
+    scenario: 'Three different students mention feeling overwhelmed by the same class this term.',
+    options: [
+      { id: 'apt-social-3-a', text: "You start wondering if it's something structural — pacing, workload, timing — rather than about each student individually.", isCorrectInstinct: true, trait: 'Extraversion' },
+      { id: 'apt-social-3-b', text: 'You focus on helping each of the three work through it individually, one at a time.', isCorrectInstinct: false },
+      { id: 'apt-social-3-c', text: "You wait to see if more students mention it before deciding it's worth looking into.", isCorrectInstinct: false },
+    ],
+  },
+  // --- Droit (placeholder — held pending Legal clearance) ---
   {
     id: 'apt-droit-1',
     targetCluster: 'Droit',
